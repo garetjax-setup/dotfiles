@@ -1,0 +1,6 @@
+[submodule "powerline"]
+	path = powerline
+	url = https://github.com/Lokaltog/powerline.git
+[submodule "zsh/zaw"]
+	path = zsh/zaw
+	url = https://github.com/zsh-users/zaw.git
