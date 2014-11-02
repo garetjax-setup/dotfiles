@@ -1,4 +1,4 @@
-# Sources by all non-interactive shells
+# Sourced by all non-interactive zsh shells
 
 #{{{ Avoid locale errors with python
 export LC_ALL=en_US.UTF-8
@@ -6,7 +6,6 @@ export LANG=en_US.UTF-8
 #}}}
 
 #{{{ Path extensions
-export PATH="${HOME}/.gem/ruby/2.0.0/bin:${PATH}"
 export PATH="${HOME}/.local/bin:${PATH}"
 #}}}
 
