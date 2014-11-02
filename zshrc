@@ -104,10 +104,6 @@ autoload run-help
 HELPDIR=~/zsh_help
 #}}}
 
-#{{{ Avoid locale errors with python
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-#}}}
 
 #{{{ Relative cd
 
@@ -456,11 +452,6 @@ LOGCHECK=0
 # Autoload screen if we aren't in it.  (Thanks Fjord!)
 #if [[ $STY = '' ]] then screen -xR; fi
 #
-
-#{{{ Path extensions
-export PATH="${HOME}/.gem/ruby/2.0.0/bin:${PATH}"
-export PATH="${HOME}/.local/bin:${PATH}"
-#}}}
 
 # added by travis gem
 [ -f /home/garetjax/.travis/travis.sh ] && source /home/garetjax/.travis/travis.sh
