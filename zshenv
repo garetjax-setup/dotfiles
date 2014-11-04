@@ -6,13 +6,7 @@ export LANG=en_US.UTF-8
 #}}}
 
 #{{{ Path extensions
-export PATH="${HOME}/.local/bin:${PATH}"
-#}}}
-
-#{{{ Load boxen env
-# Required to add the custom homebrew bin folder to the path when invoked
-# through non-interactive sub shells (e.g. #!/bin/sh).
-[ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
+export PATH="/opt/boxen/homebrew/bin:${HOME}/.local/bin:${PATH}"
 #}}}
 
 #{{{ Boot2docker config

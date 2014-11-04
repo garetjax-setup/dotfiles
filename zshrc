@@ -455,3 +455,7 @@ LOGCHECK=0
 
 # added by travis gem
 [ -f /home/garetjax/.travis/travis.sh ] && source /home/garetjax/.travis/travis.sh
+
+#{{{ Load boxen env
+[ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
+#}}}
