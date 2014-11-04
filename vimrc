@@ -180,14 +180,14 @@ set shell=zsh
 set autowriteall
 
 
-if (has("gui_running"))
+if has("gui_running")
 	set guioptions-=T  " Remove toolbar
 	set guioptions-=r  " Remove right scrollbar
 	set guioptions-=L  " Remove left scrollbar
 	set guioptions-=e  " Remove tab bar
 
 	if has("gui_macvim")
-		set guifont=Source\ Code\ Pro\ for\ Powerline:h12
+		set guifont=Monaco:h12
 		set guioptions-=R
 		set guioptions-=l
 
@@ -200,7 +200,7 @@ if (has("gui_running"))
 		let macvim_hig_shift_movement = 1
 
 		" Autosave files when losing focus
-		autocmd FocusLost * nested silent! wall
+		autocmd BufLeave,FocusLost * nested wall
 
 		" Switch splits using Command-Alt-Up/Down/Right/Left
 		map <A-D-Right> <C-W><Right>
@@ -277,29 +277,29 @@ command! Py2 call Python2Support()
 command! Py3 call Python3Support()
 
 fu! Python2Support()
-	let g:syntastic_python_python_exec = '/home/garetjax/.vimenvs/py2/bin/python'
-	let g:syntastic_python_pyflakes_exec = '/home/garetjax/.vimenvs/py2/bin/pyflakes'
-	let g:syntastic_python_flake8_exec = '/home/garetjax/.vimenvs/py2/bin/flake8'
-	let g:syntastic_python_pylint_exec = '/home/garetjax/.vimenvs/py2/bin/pylint'
-	let g:syntastic_python_py3kwarn_exec = '/home/garetjax/.vimenvs/py2/bin/py3kwarn'
+	let g:syntastic_python_python_exec = $HOME . '/.vimenvs/py2/bin/python'
+	let g:syntastic_python_pyflakes_exec = $HOME . '/.vimenvs/py2/bin/pyflakes'
+	let g:syntastic_python_flake8_exec = $HOME . '/.vimenvs/py2/bin/flake8'
+	let g:syntastic_python_pylint_exec = $HOME . '/.vimenvs/py2/bin/pylint'
+	let g:syntastic_python_py3kwarn_exec = $HOME . '/.vimenvs/py2/bin/py3kwarn'
 	let g:syntastic_python_checkers = ['flake8', 'py3kwarn'] ", 'pylint']
 	execute 'SyntasticCheck'
 endfunction
 
 fu! Python3Support()
-	let g:syntastic_python_python_exec = '/home/garetjax/.vimenvs/py3/bin/python'
-	let g:syntastic_python_pyflakes_exec = '/home/garetjax/.vimenvs/py3/bin/pyflakes'
-	let g:syntastic_python_flake8_exec = '/home/garetjax/.vimenvs/py3/bin/flake8'
-	let g:syntastic_python_pylint_exec = '/home/garetjax/.vimenvs/py3/bin/pylint'
+	let g:syntastic_python_python_exec = $HOME . '/.vimenvs/py3/bin/python'
+	let g:syntastic_python_pyflakes_exec = $HOME . '/.vimenvs/py3/bin/pyflakes'
+	let g:syntastic_python_flake8_exec = $HOME . '/.vimenvs/py3/bin/flake8'
+	let g:syntastic_python_pylint_exec = $HOME . '/.vimenvs/py3/bin/pylint'
 	let g:syntastic_python_checkers = ['flake8'] ", 'pylint']
 	execute 'SyntasticCheck'
 endfunction
 
-let g:syntastic_python_python_exec = '/home/garetjax/.vimenvs/py2/bin/python'
-let g:syntastic_python_pyflakes_exec = '/home/garetjax/.vimenvs/py2/bin/pyflakes'
-let g:syntastic_python_flake8_exec = '/home/garetjax/.vimenvs/py2/bin/flake8'
-let g:syntastic_python_pylint_exec = '/home/garetjax/.vimenvs/py2/bin/pylint'
-let g:syntastic_python_py3kwarn_exec = '/home/garetjax/.vimenvs/py2/bin/py3kwarn'
+let g:syntastic_python_python_exec = $HOME . '/.vimenvs/py2/bin/python'
+let g:syntastic_python_pyflakes_exec = $HOME . '/.vimenvs/py2/bin/pyflakes'
+let g:syntastic_python_flake8_exec = $HOME . '/.vimenvs/py2/bin/flake8'
+let g:syntastic_python_pylint_exec = $HOME . '/.vimenvs/py2/bin/pylint'
+let g:syntastic_python_py3kwarn_exec = $HOME . '/.vimenvs/py2/bin/py3kwarn'
 let g:syntastic_python_checkers = ['flake8', 'py3kwarn'] ", 'pylint']
 
 " -------------------------------------------
