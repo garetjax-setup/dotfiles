@@ -148,6 +148,16 @@ alias git='hub'
 alias greset='git reset --hard HEAD && git clean -f'
 alias tmux='TERM=xterm-256color tmux'
 
+alias gs='git status'
+alias ga='git add'
+alias gb='git branch'
+alias gc='git commit'
+alias gd='git diff'
+alias go='git checkout'
+alias gk='gitk --all&'
+alias gx='gitx --all'
+alias gh='git hist'
+
 compdef hub='git'
 
 #{{{ Custom project extensions
