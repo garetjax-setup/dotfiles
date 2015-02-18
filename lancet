@@ -1,0 +1,11 @@
+[tracker]
+url = https://divio-ch.atlassian.net
+username = garetjax
+
+[harvest]
+url = https://divio.harvestapp.com
+username = jonathan.stoppani@divio.ch
+task_id = 93551
+
+[github]
+username = jonathan@stoppani.name
