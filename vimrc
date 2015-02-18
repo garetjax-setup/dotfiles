@@ -75,7 +75,7 @@ fu! Presentation()
 	let &colorcolumn=0
 	set cursorcolumn!
 	hi Normal guibg=black
-	set guifont=Droid\ Sans\ Mono\ for\ Powerline\ 24
+	set guifont=Monaco:h24
 endfunction
 
 "autocmd VimEnter * xunmap s
@@ -197,10 +197,10 @@ if has("gui_running")
 		autocmd VimResized * wincmd =
 
 		" Enable OSX-style shift+movement text selection
-		let macvim_hig_shift_movement = 1
+		" let macvim_hig_shift_movement = 1
 
 		" Autosave files when losing focus
-		autocmd BufLeave,FocusLost * nested wall
+		autocmd BufLeave,FocusLost * nested silent! wall
 
 		" Switch splits using Command-Alt-Up/Down/Right/Left
 		map <A-D-Right> <C-W><Right>
@@ -413,8 +413,8 @@ autocmd BufWritePre *.sass :%s/\s\+$//e
 "autocmd filetype html setlocal ft=htmldjango.html " For SnipMate
 autocmd BufNewFile,BufRead *.tmpl set filetype=html
 autocmd filetype html,htmljinja,htmldjango,xml,xsl,xslt setlocal expandtab
-autocmd filetype html,htmljinja,htmldjango,xml,xsl,xslt setlocal shiftwidth=2
-autocmd filetype html,htmljinja,htmldjango,xml,xsl,xslt setlocal tabstop=2
+autocmd filetype html,htmljinja,htmldjango,xml,xsl,xslt setlocal shiftwidth=4
+autocmd filetype html,htmljinja,htmldjango,xml,xsl,xslt setlocal tabstop=4
 autocmd filetype html,htmljinja,htmldjango,xml,xsl,xslt setlocal foldmethod=syntax
 
 

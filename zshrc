@@ -130,7 +130,7 @@ alias sz='source ~/.zshrc'
 alias ez='vim ~/.zshrc'
 alias mk=popd
 alias ls='ls -h'
-alias l='ls -lFh'
+alias l='lancet'
 alias lh='ls -lh'
 alias rmall='rm -rf'
 alias ll='ls -alFh'
@@ -139,6 +139,7 @@ alias pd='popd'
 alias greppy="find . -name '*.py' | xargs grep"
 alias search="find . -name"
 alias copy="xclip -selection c"
+alias dj="fig run django"
 #}}}
 
 alias vim='vim'
@@ -158,6 +159,10 @@ alias gh='git hist'
 
 compdef hub='git'
 
+#{{{ Lancet integration
+lancet --setup-helper | source /dev/stdin
+#}}}
+
 #{{{ Custom project extensions
 
 # Function to cd to the specified Project directory (or to the projects root
@@ -170,8 +175,13 @@ function pp {
         deactivate
     fi
 }
-compdef '_files -/ -W $HOME/projects' pp
+compdef '_files -/ -W $HOME/workspace' pp
 #}}}
+
+docker-enter() {
+  boot2docker ssh '[ -f /var/lib/boot2docker/nsenter ] || docker run --rm -v /var/lib/boot2docker/:/target jpetazzo/nsenter'
+  boot2docker ssh -t sudo /var/lib/boot2docker/docker-enter "$@"
+}
 
 #{{{ Misc.
 
@@ -309,15 +319,15 @@ bindkey -M viins 'jj' vi-cmd-mode
 bindkey -M vicmd 'u' undo
 
 # Rebind the insert key.  I really can't stand what it currently does.
-#bindkey '\e[2~' overwrite-mode
+bindkey '\e[2~' overwrite-mode
 
 # Rebind the delete key. Again, useless.
-#bindkey '\e[3~' delete-char
+bindkey '\e[3~' delete-char
 
 bindkey -M vicmd '!' edit-command-output
 
 # it's like, space AND completion.  Gnarlbot.
-bindkey -M viins ' ' magic-space
+bindkey ' ' magic-space
 
 #}}}
 
@@ -467,3 +477,6 @@ LOGCHECK=0
 #{{{ Load boxen env
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
 #}}}
+
+# added by travis gem
+[ -f /Users/garetjax/.travis/travis.sh ] && source /Users/garetjax/.travis/travis.sh
