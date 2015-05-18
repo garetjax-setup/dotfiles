@@ -12,7 +12,9 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 
 autoload colors && colors
 
-source ~/.zsh/zaw/zaw.zsh
+for file in ~/.zsh/*.zsh; do
+    source "$file"
+done
 #}}}
 
 #{{{ Options
@@ -61,7 +63,7 @@ setopt VI
 
 # only fools wouldn't do this ;-)
 # I'm a fool!
-export EDITOR="vim -v"
+export EDITOR="vim"
 
 #setopt IGNORE_EOF
 
@@ -89,17 +91,6 @@ setopt RC_EXPAND_PARAM
 #}}}
 
 #{{{ External Files
-
-# Include stuff that should only be on this
-if [[ -r ~/.localinclude ]]; then
-    source ~/.localinclude
-fi
-
-# Include local directories
-if [[ -r ~/.localdirs ]]; then
-    source ~/.localdirs
-fi
-
 autoload run-help
 HELPDIR=~/zsh_help
 #}}}
@@ -125,7 +116,7 @@ function rcdalias {
 
 #}}}
 
-#{{{ Shell Conveniences
+#{{{ Shell conveniences
 alias sz='source ~/.zshrc'
 alias ez='vim ~/.zshrc'
 alias mk=popd
@@ -134,34 +125,22 @@ alias l='lancet'
 alias lh='ls -lh'
 alias rmall='rm -rf'
 alias ll='ls -alFh'
-alias g='git'
 alias pd='popd'
 alias greppy="find . -name '*.py' | xargs grep"
 alias search="find . -name"
 alias copy="xclip -selection c"
-alias dj="fig run django"
+
+# Copy with a progress bar.
+alias cpv="rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress --"
 #}}}
 
+# Editor
 alias vim='vim'
 alias vi='vim'
 alias mvim='gvim'
-alias git='hub'
-alias greset='git reset --hard HEAD && git clean -f'
+
+# Tmux
 alias tmux='TERM=xterm-256color tmux'
-
-alias gs='git status'
-alias ga='git add'
-alias gb='git branch'
-alias gc='git commit'
-alias gd='git diff'
-alias go='git checkout'
-alias gh='git hist'
-
-compdef hub='git'
-
-#{{{ Lancet integration
-lancet --setup-helper | source /dev/stdin
-#}}}
 
 #{{{ Custom project extensions
 
@@ -171,54 +150,41 @@ function pp {
     cd $HOME/workspace/$1
     if [ -f .virtualenv ]; then
         workon $(cat .virtualenv)
-    elif [ ! -z "$VIRTUAL_ENV" ]; then
-        deactivate
+    else
+        if [ ! -z "$VIRTUAL_ENV" ]; then
+            deactivate
+        fi
+        # Search for virtualenvs
+        local -a venv_dirs
+        venv_dirs=(.venv venv env)
+        for dir in $venv_dirs ; do
+            if [ -f $dir/bin/activate ] ; then
+                source $dir/bin/activate
+                break
+            fi
+        done
     fi
 }
 compdef '_files -/ -W $HOME/workspace' pp
 #}}}
 
-docker-enter() {
-  boot2docker ssh '[ -f /var/lib/boot2docker/nsenter ] || docker run --rm -v /var/lib/boot2docker/:/target jpetazzo/nsenter'
-  boot2docker ssh -t sudo /var/lib/boot2docker/docker-enter "$@"
-}
-
-#{{{ Misc.
-
-# copy with a progress bar.
-alias cpv="rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress --"
-
-#}}}
-
-#{{{ Globals...
-
 # Global aliases, work in every point of a command
 #alias -g G="| grep"
 #alias -g L="| less"
 
-#}}}
-
-#{{{ Suffixes...
-
-#}}}
-
-#}}}
-
 #{{{ Completion Stuff
 
 #{{{ Taskwarrior autocompletion
-
 zstyle ':completion:*:*:task:*:arguments' list-colors "=(#b) #([^-]#)*=$color[cyan]=$color[bold];$color[blue]" 
 zstyle ':completion:*:*:task:*:default' list-colors "=(#b) #([^-]#)*=$color[cyan]=$color[green]" 
 zstyle ':completion:*:*:task:*:values' list-colors "=(#b) #([^-]#)*=$color[cyan]=$color[bold];$color[red]" 
 zstyle ':completion:*:*:task:*:commands' list-colors "=(#b) #([^-]#)*=$color[cyan]=$color[yellow]"
-
 #}}}
 
 bindkey -M viins '\C-i' complete-word
 
 # Faster! (?)
-#zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion::complete:*' use-cache 1
 
 # case insensitive completion
 #zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -285,9 +251,9 @@ zstyle ':completion:*' ignore-parents parent pwd
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 
-
 #bindkey '^H' history-search-backward
 bindkey '^H' zaw-history
+bindkey -M filterselect '^E' accept-search
 
 # Incremental search is elite!
 bindkey -M vicmd "/" history-incremental-search-backward
@@ -303,8 +269,8 @@ bindkey "\eOP" run-help
 bindkey -M vicmd "q" push-line
 
 # Ensure that arrow keys work as they should
-bindkey '\e[A' up-line-or-history
-bindkey '\e[B' down-line-or-history
+bindkey '\e[A' history-beginning-search-backward
+bindkey '\e[B' history-beginning-search-forward
 
 bindkey '\eOA' up-line-or-history
 bindkey '\eOB' down-line-or-history
@@ -331,133 +297,6 @@ bindkey ' ' magic-space
 
 #}}}
 
-#{{{ History Stuff
-
-# Where it gets saved
-HISTFILE=~/.history
-
-# Remember about a years worth of history (AWESOME)
-SAVEHIST=10000
-HISTSIZE=10000
-
-# Don't overwrite, append!
-setopt APPEND_HISTORY
-
-# Write after each command
-setopt INC_APPEND_HISTORY
-
-# Killer: share history between multiple shells
-#setopt SHARE_HISTORY
-
-# If I type cd and then cd again, only save the last one
-setopt HIST_IGNORE_DUPS
-
-# Even if there are commands inbetween commands that are the same, still only save the last one
-setopt HIST_IGNORE_ALL_DUPS
-
-# Pretty    Obvious.  Right?
-setopt HIST_REDUCE_BLANKS
-
-# If a line starts with a space, don't save it.
-setopt HIST_IGNORE_SPACE
-setopt HIST_NO_STORE
-
-# When using a hist thing, make a newline show the change before executing it.
-setopt HIST_VERIFY
-
-# Save the time and how long a command ran
-setopt EXTENDED_HISTORY
-
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_FIND_NO_DUPS
-
-#}}}
-
-#{{{ Prompt!
-
-host_color=cyan
-history_color=yellow
-user_color=green
-root_color=red
-directory_color=magenta
-error_color=red
-jobs_color=green
-
-host_prompt="%{$fg_bold[$host_color]%}%m%{$reset_color%}"
-
-jobs_prompt1="%{$fg_bold[$jobs_color]%}(%{$reset_color%}"
-
-jobs_prompt2="%{$fg[$jobs_color]%}%j%{$reset_color%}"
-
-jobs_prompt3="%{$fg_bold[$jobs_color]%})%{$reset_color%}"
-
-jobs_total="%(1j.${jobs_prompt1}${jobs_prompt2}${jobs_prompt3} .)"
-
-history_prompt1="%{$fg_bold[$history_color]%}[%{$reset_color%}"
-
-history_prompt2="%{$fg[$history_color]%}%h%{$reset_color%}"
-
-history_prompt3="%{$fg_bold[$history_color]%}]%{$reset_color%}"
-
-history_total="${history_prompt1}${history_prompt2}${history_prompt3}"
-
-error_prompt1="%{$fg_bold[$error_color]%}<%{$reset_color%}"
-
-error_prompt2="%{$fg[$error_color]%}%?%{$reset_color%}"
-
-error_prompt3="%{$fg_bold[$error_color]%}>%{$reset_color%}"
-
-error_total="%(?..${error_prompt1}${error_prompt2}${error_prompt3} )"
-
-setopt prompt_subst
-autoload -Uz vcs_info
-
-zstyle ':vcs_info:*' actionformats '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats       "%F{2}(%s%F{3}:%F{2}%b%u)%f "
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-zstyle ':vcs_info:*' enable git cvs svn
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' unstagedstr ' *'
-
-_vcs_info_wrapper() {
-if [[ ! -a ".novcsprompt" ]]; then
-  vcs_info
-  if [ -n "$vcs_info_msg_0_" ]; then
-    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
-  fi
-fi
-}
-
-_virtualenv_prompt() {
-	if [ ! -z "$VIRTUAL_ENV" ] ; then
-		echo "%F{3}("$(basename "$VIRTUAL_ENV")")%f "
-	fi
-}
-
-_git_status() {
-	git status >/dev/null 2>&1 && [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo '*'
-}
-
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-
-RPROMPT=$'%(?..[ %F{7}%?%f ])'
-
-PROMPT=$'$(_virtualenv_prompt)%1~ $(_vcs_info_wrapper)%{$fg[yellow]%}▸%{$reset_color%} '
-
-_force_rehash() {
-  (( CURRENT == 1 )) && rehash
-  return 1  # Because we didn't really complete anything
-}
-
-edit-command-output() {
- BUFFER=$(eval $BUFFER)
- CURSOR=0
-}
-zle -N edit-command-output
-
-#}}}
-
 #{{{ Testing... Testing...
 #exec 2>>(while read line; do
 #print '\e[91m'${(q)line}'\e[0m' > /dev/tty; done &)
@@ -471,12 +310,6 @@ LOGCHECK=0
 #if [[ $STY = '' ]] then screen -xR; fi
 #
 
-# added by travis gem
-[ -f /home/garetjax/.travis/travis.sh ] && source /home/garetjax/.travis/travis.sh
-
 #{{{ Load boxen env
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
 #}}}
-
-# added by travis gem
-[ -f /Users/garetjax/.travis/travis.sh ] && source /Users/garetjax/.travis/travis.sh

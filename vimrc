@@ -2,23 +2,54 @@
 " VIM Configuration file
 " #################################################################
 
-"python from powerline.vim import setup as powerline_setup
-"python powerline_setup()
-"python del powerline_setup
+" Disable vi-compatibility mode (should be set to off automatically
+" when loadin a .vimrc file, but we set it here to be explicit).
+set nocompatible
+
+filetype off                 " Required for Vundle, will be re-enabled later
+
+" Set the runtime path to include Vundle
+set rtp+=~/.vim/bundle/Vundle.vim
+
+" Load plugins managed by Vundle
+call vundle#begin('~/.vimbundles')
+	Plugin 'gmarik/Vundle.vim'
+	Plugin 'vim-scripts/loremipsum'
+	Plugin 'kien/ctrlp.vim'
+	Plugin 'honza/dockerfile.vim'
+	Plugin 'ervandew/supertab'
+	Plugin 'scrooloose/syntastic'
+	Plugin 'godlygeek/tabular'
+	Plugin 'kchmck/vim-coffee-script'
+	Plugin 'garetjax-setup/vim-colors-solarized'
+	Plugin 'mitsuhiko/vim-jinja'
+	Plugin 'vim-latex/vim-latex'
+	Plugin 'nvie/vim-pep8'
+	Plugin 'rodjek/vim-puppet'
+	Plugin 'hynek/vim-python-pep8-indent'
+	Plugin 'tpope/vim-surround'
+	Plugin 'nvie/vim-togglemouse'
+	Plugin 'airblade/vim-gitgutter'
+	Plugin 'mileszs/ack.vim'
+	Plugin 'farseer90718/vim-taskwarrior'
+	Plugin 'editorconfig-vim'
+	Plugin 'Gundo'
+	Plugin 'tpope/vim-fugitive'
+call vundle#end()
+
+filetype plugin indent on    " Reenable filetype
 
 " Ctrl-P plugin configuration
-set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = '<silent> <leader>t'
 let g:ctrlp_working_path_mode = ''
 let g:ctrlp_user_command = ['.git', 'git ls-files %s --cached --exclude-standard --others']
 nmap <silent> <leader>r :CtrlPMRU<CR>
 
-" Disable vi-compatibility mode (should be set to off automatically
-" when loadin a .vimrc file, but we set it here to be explicit).
-set nocompatible
-
 " Supertab configuration
 let g:SuperTabMappingTabLiteral = '<M-tab>'
+
+" EditorConfig configuration
+let g:EditorConfig_max_line_indicator = 'fill'
 
 let xml_no_html = 0
 
@@ -26,7 +57,7 @@ com! FormatJSON %!python -m json.tool
 
 " Use pathogen to easily modify the runtime path to include all
 " plugins under the ~/.vim/bundle directory.
-call pathogen#infect()
+" call pathogen#infect()
 
 " Change the mapleader from '\' to '.'. This allows to digit
 " .<command> and having a custom command executed (even without
@@ -39,6 +70,14 @@ nmap <silent> <leader>ev :vsplit $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 nmap <silent> <leader>f :retab!<CR>
 "nmap <silent> <leader>r :CommandTBuffer<CR>
+
+" Gundo configuration
+let g:gundo_width = 45
+let g:gundo_preview_height = 20
+let g:gundo_right = 0
+let g:gundo_preview_bottom = 1
+
+nmap <silent> <leader>u :GundoToggle<CR>
 
 " Hide the current buffer instead of closing it. This means that
 " you can have unwritten changes to a file and open a new file
@@ -104,7 +143,7 @@ set incsearch
 set splitright
 set splitbelow
 
-set number
+set relativenumber
 set numberwidth=5
 
 " Printing options
@@ -115,6 +154,9 @@ set printoptions=number:y,syntax:a,left:10mm,top:15mm,bottom:15mm,right:10mm
 " Enable syntax highlighting
 syntax enable
 set background=dark
+"let g:solarized_visibility = "high"
+"let g:solarized_contrast = "high"
+let g:solarized_termcolors=256
 colorscheme solarized
 
 " Set history lines
@@ -126,9 +168,9 @@ set undolevels=1000
 set wildignore=*.swp,*.bak,*.pyc,*.class,.git/*,build/*,dist/*,*.egg-info/*,collected-static/*
 
 " Enable filetype plugin
-filetype on
-filetype plugin on
-filetype indent on
+"filetype on
+"filetype plugin on
+"filetype indent on
 
 " Automatically reload file when a file is changed
 set autoread
@@ -241,6 +283,8 @@ if has("gui_running")
 		map <A-D> :new<CR>
 		imap <A-D> <C-O>:new<CR>
 	endif
+else
+
 endif
 
 " Autosave upon lost focus in iTerm
@@ -268,10 +312,22 @@ let &colorcolumn=join(range(80,335),",")
 "hi ColorColumn guibg=#052f3b ctermbg=0
 hi SignColumn guibg=#052f3b
 
+" Use ag instead of ack when searching if it is available
+if executable('ag')
+	let g:ackprg = 'ag --vimgrep --ignore-dir=LC_MESSAGES'
+endif
+
+command! -bang -nargs=* -complete=file SP call ack#Ack('grep<bang>',"--file-search-regex='.*\\.py' --ignore='migrations' " . <q-args>)
+command! -bang -nargs=* -complete=file SH call ack#Ack('grep<bang>',"--file-search-regex='.*\\.(html|js)' " . <q-args>)
+
 " -------------------------------------------
 " Syntastic configuration option
 " -------------------------------------------
+" Run checks when opening files
 let g:syntastic_check_on_open = 1
+
+" Allows to use :lnext and :lprev to jump between errors/warnings
+let g:syntastic_always_populate_loc_list = 1
 
 command! Py2 call Python2Support()
 command! Py3 call Python3Support()
@@ -303,6 +359,12 @@ let g:syntastic_python_py3kwarn_exec = $HOME . '/.vimenvs/py2/bin/py3kwarn'
 let g:syntastic_python_checkers = ['flake8', 'py3kwarn'] ", 'pylint']
 
 " -------------------------------------------
+" Taskwarrior configuration
+" -------------------------------------------
+
+let g:task_rc_override = 'rc.defaultwidth=0 rc.defaultheight=0'
+
+" -------------------------------------------
 " Django HTML templates surrounding blocks
 " -------------------------------------------
 
@@ -326,7 +388,7 @@ autocmd filetype python setlocal foldmethod=indent
 
 " Automatically strip whitespace on saving and switching buffer
 "autocmd FocusLost,BufLeave,BufWritePre *.py,*.c,*.cpp,*.h :exe "normal! ma" | :%s/\s\+$//e | :exe "normal `a"
-autocmd FocusLost *.py nested SyntasticCheck
+autocmd FocusLost ^(?!fugitive:)*.py nested SyntasticCheck
 autocmd FocusLost,BufLeave,BufWrite *.py nested let b:spacestrip_view=winsaveview()|%s/\s\+$//e|%s/\_.\_^\n*\%$//e|call winrestview(b:spacestrip_view)
 
 " Load the python autocompletion dictionary
@@ -359,6 +421,7 @@ autocmd filetype rst setlocal foldmethod=indent
 " -------------------------------------------
 
 " Expand tabs when working on python files
+autocmd BufNewFile,BufRead *.bean set filetype=coffee
 autocmd filetype coffee setlocal expandtab
 autocmd filetype coffee setlocal shiftwidth=4
 autocmd filetype coffee setlocal tabstop=4

@@ -1,0 +1,16 @@
+[general]
+targets = divio_jira
+
+[notifications]
+notifications = False
+backend = growlnotify
+
+[divio_jira]
+service = jira
+jira.base_uri = https://divio-ch.atlassian.net
+jira.username = garetjax
+jira.password = @oracle:use_keyring
+jira.query = assignee = currentUser() AND (sprint in openSprints() OR sprint is EMPTY) AND status != Closed AND status != Resolved AND resolution = Unresolved
+jira.version = 5
+jira.label_template = jira_{{label}}
+add_tags = divio

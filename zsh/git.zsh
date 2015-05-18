@@ -1,0 +1,11 @@
+# Git
+alias g='hub'
+alias git='hub'
+alias greset='git reset --hard HEAD && git clean -f'
+alias gs='git status'
+alias ga='git add'
+alias gb='git branch'
+alias gc='git commit'
+alias gd='git diff'
+alias go='git checkout'
+alias gh='git hist'

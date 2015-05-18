@@ -1,3 +1,7 @@
+[lancet]
+add_to_path = 
+
+
 [tracker]
 url = https://divio-ch.atlassian.net
 username = garetjax
@@ -9,3 +13,6 @@ task_id = 93551
 
 [github]
 username = jonathan@stoppani.name
+
+[commands]
+ssh = lancet.contrib.dploi.ssh
