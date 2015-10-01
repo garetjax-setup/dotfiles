@@ -17,6 +17,7 @@ username = jonathan@stoppani.name
 [commands]
 ssh = lancet.contrib.dploi.ssh
 relnotes = lancet.contrib.release_notes.release_notes
+versions = lancet.contrib.release_notes.list_versions
 # setver = lancet.contrib.release_notes.set_version
 contributors = lancet.contrib.packaging_tools.contributors
 tagver = lancet.contrib.packaging_tools.tag_version

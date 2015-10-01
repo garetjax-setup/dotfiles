@@ -35,6 +35,7 @@ call vundle#begin('~/.vimbundles')
 	Plugin 'editorconfig-vim'
 	Plugin 'Gundo'
 	Plugin 'tpope/vim-fugitive'
+	Plugin 'wakatime/vim-wakatime'
 call vundle#end()
 
 filetype plugin indent on    " Reenable filetype
@@ -514,6 +515,8 @@ autocmd filetype tex setlocal breakindent
 autocmd filetype tex setlocal colorcolumn=0
 autocmd filetype tex setlocal spell spelllang=en_us
 "autocmd filetype tex hi NonText guifg=#ba5757
+
+au BufNewFile,BufRead *.yml.j2 set filetype=yaml
 
 "autocmd filetype tex set textwidth=100
 set grepprg=grep\ -nH\ $*
