@@ -1,4 +1,5 @@
 export WORKON_HOME=~/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/opt/boxen/homebrew/bin/python
 mkdir -p $WORKON_HOME
 source /opt/boxen/homebrew/bin/virtualenvwrapper.sh
 

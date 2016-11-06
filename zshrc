@@ -12,12 +12,14 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 
 autoload colors && colors
 
-for file in ~/.zsh/*.zsh; do
-    source "$file"
-done
+if [ -d ~/.zsh ] ; then
+    for file in ~/.zsh/*.zsh; do
+        source "$file"
+    done
+fi
 #}}}
 
-#{{{ Options
+#{{{ 
 
 REPORTTIME=5
 
@@ -109,11 +111,6 @@ function rcd {
 	fi
 }
 
-function rcdalias {
-	function $1 {rcd $HOME/Documents/School/MSE/Courses $1}
-	compdef "_files -/ -W $2" $1
-}
-
 #}}}
 
 #{{{ Shell conveniences
@@ -189,7 +186,7 @@ zstyle ':completion::complete:*' use-cache 1
 # case insensitive completion
 #zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-zstyle :compinstall filename '/home/admin/.zshrc'
+zstyle :compinstall filename '/home/garetjax/.zshrc'
 
 # Display category names
 zstyle ':completion:*' verbose yes
@@ -313,3 +310,5 @@ LOGCHECK=0
 #{{{ Load boxen env
 [ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
 #}}}
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

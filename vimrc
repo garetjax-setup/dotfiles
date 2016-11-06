@@ -13,28 +13,28 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 " Load plugins managed by Vundle
 call vundle#begin('~/.vimbundles')
-	Plugin 'gmarik/Vundle.vim'
-	Plugin 'vim-scripts/loremipsum'
-	Plugin 'kien/ctrlp.vim'
-	Plugin 'honza/dockerfile.vim'
-	Plugin 'ervandew/supertab'
-	Plugin 'scrooloose/syntastic'
-	Plugin 'godlygeek/tabular'
-	Plugin 'kchmck/vim-coffee-script'
-	Plugin 'garetjax-setup/vim-colors-solarized'
-	Plugin 'mitsuhiko/vim-jinja'
-	Plugin 'vim-latex/vim-latex'
-	Plugin 'nvie/vim-pep8'
-	Plugin 'rodjek/vim-puppet'
-	Plugin 'hynek/vim-python-pep8-indent'
-	Plugin 'tpope/vim-surround'
-	Plugin 'nvie/vim-togglemouse'
-	Plugin 'airblade/vim-gitgutter'
-	Plugin 'mileszs/ack.vim'
-	Plugin 'farseer90718/vim-taskwarrior'
-	Plugin 'editorconfig-vim'
 	Plugin 'Gundo'
+	Plugin 'XML-Folding'
+	Plugin 'airblade/vim-gitgutter'
+	Plugin 'alfredodeza/coveragepy.vim'
+	Plugin 'editorconfig-vim'
+	Plugin 'ervandew/supertab'
+	Plugin 'farseer90718/vim-taskwarrior'
+	Plugin 'garetjax-setup/vim-colors-solarized'
+	Plugin 'gmarik/Vundle.vim'
+	Plugin 'godlygeek/tabular'
+	Plugin 'hynek/vim-python-pep8-indent'
+	Plugin 'jacquesbh/vim-showmarks'
+	Plugin 'jiangmiao/auto-pairs'
+	Plugin 'kien/ctrlp.vim'
+	Plugin 'mileszs/ack.vim'
+	Plugin 'nvie/vim-pep8'
+	Plugin 'nvie/vim-togglemouse'
+	Plugin 'scrooloose/syntastic'
+	Plugin 'sheerun/vim-polyglot'
 	Plugin 'tpope/vim-fugitive'
+	Plugin 'tpope/vim-surround'
+	Plugin 'vim-scripts/loremipsum'
 	Plugin 'wakatime/vim-wakatime'
 call vundle#end()
 
@@ -418,19 +418,18 @@ autocmd filetype rst setlocal tabstop=3
 autocmd filetype rst setlocal foldmethod=indent
 
 " -------------------------------------------
-" Coffeescripts specific configuration
+" Javascript specific configuration
 " -------------------------------------------
 
-" Expand tabs when working on python files
-autocmd BufNewFile,BufRead *.bean set filetype=coffee
-autocmd filetype coffee setlocal expandtab
-autocmd filetype coffee setlocal shiftwidth=4
-autocmd filetype coffee setlocal tabstop=4
-autocmd filetype coffee setlocal foldmethod=marker
+" Expand tabs when working on javascript files
+autocmd filetype javascript setlocal expandtab
+autocmd filetype javascript setlocal shiftwidth=4
+autocmd filetype javascript setlocal tabstop=4
+autocmd filetype javascript setlocal foldmethod=marker
 
 " Automatically strip whitespace on saving and switching buffer
 "autocmd FocusLost,BufLeave,BufWritePre *.py,*.c,*.cpp,*.h :exe "normal! ma" | :%s/\s\+$//e | :exe "normal `a"
-autocmd FocusLost,BufLeave,BufWrite *.coffee let b:spacestrip_view=winsaveview()|%s/\s\+$//e|%s/\_.\_^\n*\%$//e|call winrestview(b:spacestrip_view)
+autocmd FocusLost,BufLeave,BufWrite *.js let b:spacestrip_view=winsaveview()|%s/\s\+$//e|%s/\_.\_^\n*\%$//e|call winrestview(b:spacestrip_view)
 
 
 " -------------------------------------------
@@ -516,6 +515,7 @@ autocmd filetype tex setlocal colorcolumn=0
 autocmd filetype tex setlocal spell spelllang=en_us
 "autocmd filetype tex hi NonText guifg=#ba5757
 
+" YAML
 au BufNewFile,BufRead *.yml.j2 set filetype=yaml
 
 "autocmd filetype tex set textwidth=100
